@@ -1,5 +1,14 @@
 #include <iostream>
+
+#include <glad/gl.h>
 #include <SDL3/SDL.h>
+
+const GLuint WIDTH = 800, HEIGHT = 600;
+
+
+
+GLuint VAO, VBO;
+GLuint shaderProgram;
 
 int main()
 {
@@ -43,8 +52,8 @@ int main()
     // Window Creation
     window = SDL_CreateWindow(
         "Modis",
-        800,
-        600,
+        WIDTH,
+        HEIGHT,
         SDL_WINDOW_OPENGL);
 
     if (window == NULL)
@@ -62,6 +71,62 @@ int main()
         return 1;
     }
 
+    // Load GLAD
+    int gLVersion = gladLoaderLoadGL();
+    
+    if (gLVersion == 0) {
+        std::cout << "GLAD Failed" << std::endl;
+        return 1;
+    }
+
+    std::cout << "GL " << GLAD_VERSION_MAJOR(gLVersion) << "." << GLAD_VERSION_MINOR(gLVersion) << std::endl;
+
+    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl <<
+    "Renderer: " << glGetString(GL_RENDERER) << std::endl <<
+    "Version: " << glGetString(GL_VERSION) << std::endl <<
+    "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+
+    // Match Framerate
+    SDL_GL_SetSwapInterval(1);
+
+    // Create array for vertex coordinate positions
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f, // Bottom-left corner
+        0.5f, -0.5f, 0.0f, // Bottom-right corner
+        0.0f, 0.5f, 0.0f // Top corner
+    };
+
+    // Generate vertex array object names
+    glGenVertexArrays(1, &VAO);
+    // Generate buffer object names
+    glGenBuffers(1, &VBO);
+
+    // Bind the vertex array object
+    glBindVertexArray(VAO);
+
+    // For the GL_ARRAY_BUFFER binding point, make VBO the currently bound buffer
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    // Create and initialize buffer object data store, pass vertices to array buffer
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Create Shaders
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    if (vertexShader == 0) {
+        std::cout << "Vertex shader failure" << std::endl;
+    }
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    if (fragmentShader == 0) {
+        std::cout << "Fragment shader failure" << std::endl;
+    }
+
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+
     // Event Handling
     while (!done)
     {
@@ -76,7 +141,24 @@ int main()
         }
 
         // Do game logic, frames etc.
+
+        
+        
+
+        // glClearColor(0.4, 0.3, 0.95, 1);
+        // glClear(GL_COLOR_BUFFER_BIT);
+
+        // Draw the triangle
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        // Swap Buffer
+        SDL_GL_SwapWindow(window);
     }
+
+    // Unload GLAD
+    gladLoaderUnloadGL();
 
     // Destroy OpenGL Context
     SDL_GL_DestroyContext(context);
