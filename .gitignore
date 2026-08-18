@@ -1,0 +1,27 @@
+# Build output — CMake regenerates this entirely, never commit it
+build/
+out/
+
+# CMake user-specific presets (if you ever add local overrides)
+CMakeUserPresets.json
+
+# Compiled binaries
+*.exe
+*.obj
+*.o
+*.dll
+*.lib
+*.pdb
+*.ilk
+
+# Visual Studio / VS Code clutter
+.vs/
+.vscode/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+
+# OS-specific junk
+Thumbs.db
+.DS_Store
