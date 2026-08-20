@@ -118,9 +118,9 @@ int main()
 
     // Create array for vertex coordinate positions
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // Bottom-left corner
-        0.5f, -0.5f, 0.0f,  // Bottom-right corner
-        0.0f, 0.5f, 0.0f    // Top corner
+        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // Bottom-left corner
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // Bottom-right corner
+        0.0f, 0.5f, 0.0f, 1.0f, 1.0f, 1.0f    // Top corner
     };
 
     // Generate vertex array object names
@@ -137,8 +137,12 @@ int main()
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
+
+    // Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Create Shaders
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -227,6 +231,15 @@ int main()
         // Swap Buffer
         SDL_GL_SwapWindow(window);
     }
+
+    // Delete Program
+    glDeleteProgram(shaderProgram);
+    
+    // Delete VBO
+    glDeleteBuffers(1, &VBO);
+
+    // Delete VAO
+    glDeleteVertexArrays(1, &VAO);
 
     // Unload GLAD
     gladLoaderUnloadGL();
