@@ -8,6 +8,7 @@ const unsigned int WIDTH = 800, HEIGHT = 600;
 Application::Application()
 {
     window = nullptr;
+    context = nullptr;
 }
 
 Application::~Application()
@@ -23,11 +24,6 @@ Application::~Application()
 
     // Clean up
     SDL_Quit();
-}
-
-SDL_Window* Application::GetWindow()
-{
-    return window;
 }
 
 bool Application::Init()
@@ -99,11 +95,28 @@ bool Application::Init()
               << "Renderer: " << glGetString(GL_RENDERER) << std::endl
               << "Version: " << glGetString(GL_VERSION) << std::endl
               << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+              
+    // Match Framerate
+    SDL_GL_SetSwapInterval(1);
 
     return true;
 }
 
-void Application::Run()
+bool Application::Run()
 {
-    
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_EVENT_QUIT)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Application::Present()
+{
+    SDL_GL_SwapWindow(window);
 }

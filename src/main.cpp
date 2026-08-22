@@ -38,7 +38,7 @@ std::string openFile(std::string path)
 
 int main()
 {
-   Application app;
+    Application app;
 
     bool success = app.Init();
     if (success == false)
@@ -46,17 +46,7 @@ int main()
         return 1;
     }
 
-    
-
-    app.Run();
-
-    // Event Variables
-    bool done = false;
-
-    // Match Framerate
-    SDL_GL_SetSwapInterval(1);
-
-    // Create array for vertex coordinate positions
+        // Create array for vertex coordinate positions
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom-left corner
         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // Bottom-right corner
@@ -178,20 +168,9 @@ int main()
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    
     // Event Handling
-    while (!done)
+    while (app.Run())
     {
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_EVENT_QUIT)
-            {
-                done = true;
-            }
-        }
-
         // Do game logic, frames etc.
 
         glClearColor(0.4, 0.3, 0.95, 1);
@@ -208,7 +187,7 @@ int main()
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Swap Buffer
-        SDL_GL_SwapWindow(app.GetWindow());
+        app.Present();
     }
 
     // Delete Program

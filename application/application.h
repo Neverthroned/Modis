@@ -6,20 +6,19 @@ struct SDL_GLContextState;
 
 class Application
 {
-    public:
+public:
     Application();
     ~Application();
 
-    SDL_Window* GetWindow();
-
     bool Init();
-    void Run();
+    bool Run();
+    void Present();
 
-    private:
-    SDL_Window* window;
-    
+private:
+    SDL_Window *window;
+
     // GLContext Variables
-    SDL_GLContextState* context;
+    SDL_GLContextState *context;
 };
 
 #endif
