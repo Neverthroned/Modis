@@ -1,5 +1,6 @@
 #include <iostream>
 #include "application.h"
+#include "render.h"
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
 
@@ -22,12 +23,13 @@ Application::~Application()
     // Close Window
     SDL_DestroyWindow(window);
 
-    // Clean up
+    // Close SDL
     SDL_Quit();
 }
 
 bool Application::Init()
 {
+    // Initialize SDL
     bool init = SDL_Init(SDL_INIT_VIDEO);
 
     if (init == false)
@@ -36,6 +38,7 @@ bool Application::Init()
         return false;
     }
 
+    // Glad version check
     bool majorVersion = SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     if (majorVersion == false)
     {
@@ -95,15 +98,37 @@ bool Application::Init()
               << "Renderer: " << glGetString(GL_RENDERER) << std::endl
               << "Version: " << glGetString(GL_VERSION) << std::endl
               << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-              
+
     // Match Framerate
     SDL_GL_SetSwapInterval(1);
+
+    if (!ren.Init())
+        return false;
 
     return true;
 }
 
-bool Application::Run()
+void Application::Run()
 {
+    bool running = true;
+
+    while (running)
+    {
+        // Run processes
+        running = ProcessEvents();
+        ren.RenderScreen();
+        Present();
+    }
+}
+
+void Application::Present()
+{
+    SDL_GL_SwapWindow(window);
+}
+
+bool Application::ProcessEvents()
+{
+    // Event Handling
     SDL_Event event;
 
     while (SDL_PollEvent(&event))
@@ -114,9 +139,4 @@ bool Application::Run()
         }
     }
     return true;
-}
-
-void Application::Present()
-{
-    SDL_GL_SwapWindow(window);
 }

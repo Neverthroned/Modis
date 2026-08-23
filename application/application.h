@@ -1,6 +1,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "render.h"
+
 struct SDL_Window;
 struct SDL_GLContextState;
 
@@ -11,7 +13,8 @@ public:
     ~Application();
 
     bool Init();
-    bool Run();
+    void Run();
+    bool ProcessEvents();
     void Present();
 
 private:
@@ -19,6 +22,8 @@ private:
 
     // GLContext Variables
     SDL_GLContextState *context;
+
+    Render ren;
 };
 
 #endif
