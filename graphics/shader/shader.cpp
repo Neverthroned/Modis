@@ -5,8 +5,6 @@
 
 Shader::Shader()
 {
-    vertexShader = 0;
-    fragmentShader = 0;
     shaderProgram = 0;
 }
 
@@ -21,13 +19,13 @@ bool Shader::Init()
     Utilities util;
 
     // Create Shaders
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     if (vertexShader == 0)
     {
         std::cout << "Vertex shader failure" << std::endl;
         return false;
     }
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     if (fragmentShader == 0)
     {
         std::cout << "Fragment shader failure" << std::endl;
@@ -85,4 +83,17 @@ bool Shader::Init()
     // Cleanup shaders
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    return true;
+}
+
+void Shader::Use()
+{
+    glUseProgram(shaderProgram);
+}
+
+void Shader::SetInt(const std::string& name, int value)
+{
+    int location = glGetUniformLocation(shaderProgram, name.c_str());
+    glUniform1i(location, value);
 }

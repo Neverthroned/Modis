@@ -1,6 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include <string>
+
 class Shader
 {
     public:
@@ -8,10 +10,10 @@ class Shader
     ~Shader();
 
     bool Init();
+    void Use();
+    void SetInt(const std::string& name, int value);
 
     private:
-    unsigned int vertexShader;
-    unsigned int fragmentShader;
     unsigned int shaderProgram;
 
 };

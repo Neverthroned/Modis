@@ -11,12 +11,10 @@ int main()
 
     // Application init
     bool success = app.Init();
-    if (success == false)
-    {
+    if (!success)
         return 1;
-    }
 
-    // Run (and pass parameter to render screen from application)
+    // Run 
     app.Run();
 
     return 0;

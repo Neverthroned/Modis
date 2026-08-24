@@ -1,6 +1,8 @@
 #ifndef RENDER_H
 #define RENDER_H
 
+#include "shader.h"
+
 class Render
 {
 public:
@@ -14,8 +16,8 @@ private:
     unsigned int texture;
     unsigned int VAO, VBO;
     unsigned int EBO;
-    unsigned int shaderProgram;
     unsigned char *data;
+    Shader shader;
 };
 
 #endif
