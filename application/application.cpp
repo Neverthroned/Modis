@@ -4,7 +4,7 @@
 #include <SDL3/SDL.h>
 #include <glad/gl.h>
 
-const unsigned int WIDTH = 800, HEIGHT = 600;
+const unsigned int WIDTH = 800, HEIGHT = 600; // Pinned for removal
 
 Application::Application()
 {
