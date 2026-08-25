@@ -10,6 +10,7 @@ class Shader
     ~Shader();
 
     bool Init();
+    
     void Use();
     void SetInt(const std::string& name, int value);
 
