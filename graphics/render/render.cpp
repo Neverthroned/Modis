@@ -6,9 +6,11 @@
 #include "render.h"
 #include "utilities.h"
 #include "shader.h"
+#include "camera.h"
 #include <glad/gl.h>
 
 Render::Render()
+    : m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
 {
     data = nullptr;
     VAO = 0;
@@ -124,5 +126,8 @@ void Render::RenderScreen()
 
     // Bind vertex array in loop and draw quad
     glBindVertexArray(VAO);
+
+    shader.UploadUniformMat4("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
+
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

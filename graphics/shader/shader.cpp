@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glad/gl.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "shader.h"
 #include "utilities.h"
 
@@ -96,4 +97,10 @@ void Shader::SetInt(const std::string& name, int value)
 {
     int location = glGetUniformLocation(shaderProgram, name.c_str());
     glUniform1i(location, value);
+}
+
+void Shader::UploadUniformMat4(const std::string &name, const glm::mat4 &matrix)
+{
+    int location = glGetUniformLocation(shaderProgram, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }

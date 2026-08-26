@@ -2,6 +2,7 @@
 #define RENDER_H
 
 #include "shader.h"
+#include "camera.h"
 
 class Render
 {
@@ -17,6 +18,7 @@ private:
     unsigned int VAO, VBO;
     unsigned int EBO;
     unsigned char *data;
+    Camera m_Camera;
     Shader shader;
 };
 
