@@ -7,7 +7,6 @@ class Camera
 {
 public:
     Camera(float left, float right, float bottom, float top);
-    ~Camera();
 
     // Position
     const glm::vec3 &GetPosition() const { return m_Position; }
