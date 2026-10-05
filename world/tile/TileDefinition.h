@@ -3,8 +3,17 @@
 
 struct TileDefinition
 {
+    const char* name;
     bool solid;
     bool opaque;
+    /* bool transparent;
+
+    // Rendering
+    int textureID;
+
+    // Gameplay
+    bool mineable;
+    float hardness; */
 };
 
 #endif
