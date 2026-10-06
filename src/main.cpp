@@ -3,6 +3,7 @@
 #include <sstream>
 
 #include "application.h"
+#include "tileRegistry.h"
 
 int main()
 {
@@ -13,6 +14,7 @@ int main()
     bool success = app.Init();
     if (!success)
         return 1;
+
 
     // Run 
     app.Run();

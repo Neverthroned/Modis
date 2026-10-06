@@ -3,9 +3,9 @@
 
 enum class TileType
 {
-    Air,
-    Dirt,
-    Grass
+    AIR,
+    DIRT,
+    GRASS
 };
 
 #endif

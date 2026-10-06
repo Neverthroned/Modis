@@ -1,9 +1,14 @@
 #ifndef TILEDEFINITION_H
 #define TILEDEFINITION_H
 
+#include "tileType.h"
+
 struct TileDefinition
 {
+    TileType type;
+
     const char* name;
+    
     bool solid;
     bool opaque;
     /* bool transparent;
