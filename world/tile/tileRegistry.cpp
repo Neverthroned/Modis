@@ -5,9 +5,9 @@ namespace
 {
     const TileDefinition definitions[] =
     {
-        { TileType::AIR, "Air", false, false },
-        { TileType::DIRT, "Dirt", true, true },
-        { TileType::GRASS, "Grass", true, true}
+        // { TileType::AIR, "Air", false, false },
+        // { TileType::DIRT, "Dirt", true, true },
+        { TileType::GRASS, "Grass", true, true, 0}
     };
 }
 
