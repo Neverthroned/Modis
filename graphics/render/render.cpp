@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -9,8 +10,11 @@
 #include "camera.h"
 #include <glad/gl.h>
 
+#include "terrain.h"
+#include "tileRegistry.h"
+
 Render::Render()
-    : m_Camera(-1.0f, 1.0f, -1.0f, 1.0f)
+    : m_Camera(-1.0f, 32.0f, -1.0f, 32.0f)
 {
     data = nullptr;
     VAO = 0;
@@ -39,18 +43,6 @@ bool Render::Init()
 {
     // Construct Utilities
     Utilities util;
-
-    // Create array for vertex coordinate positions
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // Bottom-left corner
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // Bottom-right corner
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f,   // Top-right corner
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f   // Top-left corner
-    };
-
-    // Assign indices order for quad
-    unsigned int indices[] = {
-        0, 1, 2, 0, 2, 3};
 
     // Generate vertex array object names
     glGenVertexArrays(1, &VAO);
@@ -94,10 +86,6 @@ bool Render::Init()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    // Create and initialize buffer object data store, pass vertices to array buffer
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
     // Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
@@ -110,6 +98,69 @@ bool Render::Init()
         return false;
 
     return true;
+}
+
+void Render::BuildTerrainMesh(const Terrain &terrain)
+{
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
+    for (int y = 0; y < 32; y++)
+    {
+        for (int x = 0; x < 32; x++)
+        {
+            // Get tiles from terrain
+            TileType type = terrain.GetTile(x, y);
+
+            // assign variables for position
+            float left = static_cast<float>(x);
+            float right = left + 1.0f;
+            float bottom = static_cast<float>(y);
+            float top = bottom + 1.0f;
+
+            // Automate Insertion of vertices
+            // Bottom-left
+            vertices.insert(vertices.end(), {left, bottom, 0.0f, 0.0f, 0.0f});
+
+            // Bottom-right
+            vertices.insert(vertices.end(), {right, bottom, 0.0f, 1.0f, 0.0f});
+
+            // Top-right
+            vertices.insert(vertices.end(), {right, top, 0.0f, 1.0f, 1.0f});
+
+            // Top-left
+            vertices.insert(vertices.end(), {left, top, 0.0f, 0.0f, 1.0f});
+
+            unsigned int vertexOffset = (y * 32 + x) * 4;
+
+            indices.insert(indices.end(), {vertexOffset,
+                                           vertexOffset + 1,
+                                           vertexOffset + 2,
+
+                                           vertexOffset,
+                                           vertexOffset + 2,
+                                           vertexOffset + 3});
+        }
+    }
+
+    // Bind buffers and buffer data
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+    glBufferData(
+        GL_ARRAY_BUFFER,
+        vertices.size() * sizeof(float),
+        vertices.data(),
+        GL_STATIC_DRAW);
+
+    glBufferData(
+        GL_ELEMENT_ARRAY_BUFFER,
+        indices.size() * sizeof(unsigned int),
+        indices.data(),
+        GL_STATIC_DRAW);
+
+    indexCount = static_cast<unsigned int>(indices.size());
 }
 
 void Render::RenderScreen()
@@ -129,5 +180,5 @@ void Render::RenderScreen()
 
     shader.UploadUniformMat4("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
 }

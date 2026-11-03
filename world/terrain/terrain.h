@@ -1,15 +1,17 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include "tileType.h"
+
 class Terrain
 {
 public:
     void Generate();
 
-    Tile &GetTile(int x, int y);
+    TileType GetTile(int x, int y) const;
 
 private:
-    Tile m_Tiles[32][32];
+    TileType m_Tiles[32][32];
 };
 
 #endif

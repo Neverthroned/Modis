@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include "render.h"
+#include "terrain.h"
 
 struct SDL_Window;
 struct SDL_GLContextState;
@@ -24,6 +25,7 @@ private:
     SDL_GLContextState *context;
 
     Render ren;
+    Terrain terrain;
 };
 
 #endif

@@ -114,10 +114,15 @@ void Application::Run()
 
     while (running)
     {
+        terrain.Generate();
         // Run processes
         running = ProcessEvents();
         ren.RenderScreen();
+        ren.BuildTerrainMesh(terrain);
+        
         Present();
+
+        
     }
 }
 
