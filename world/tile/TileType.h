@@ -1,11 +1,13 @@
 #ifndef TILETYPE_H
 #define TILETYPE_H
 
-enum class TileType
+#include <cstdint>
+
+enum class TileType : std::uint16_t
 {
-    AIR,
-    DIRT,
-    GRASS
+    AIR = 0,
+    DIRT = 1,
+    GRASS = 2
 };
 
 #endif

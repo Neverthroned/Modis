@@ -7,9 +7,7 @@
 class TileRegistry
 {
     public:
-    static void Initialize();
     static const TileDefinition& get(TileType type);
-    
 };
 
 
